@@ -1,0 +1,252 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MTC Class Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+TC:wght@500&display=swap">
+<style>
+/* Layout: rundown (timeline + cost strip) on top, ranked picks with pros/cons, notes, then the elimination at the bottom */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --ink:#18221f; --muted:#5d6b66; --line:#dbe3e0;
+  --jade:#1f7a63; --jade-soft:#e2f1ec; --clay:#a8572f; --clay-soft:#f6e9e1; --hatch:#c3ccc9;
+  --good:#2f7a3d; --bad:#b0412e; --slate:#56637a; --slate-soft:#e8ebf1;
+  --f-display:"Sora","Noto Sans TC",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Noto Sans TC",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#18211e; --ink:#e7eeeb; --muted:#9aaba4; --line:#2a3632;
+  --jade:#5cc3a3; --jade-soft:#1b332b; --clay:#e3916a; --clay-soft:#36231b; --hatch:#3c4945;
+  --good:#7ccf8a; --bad:#f08a76; --slate:#a7b3c9; --slate-soft:#232a36; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#18211e; --ink:#e7eeeb; --muted:#9aaba4; --line:#2a3632;
+  --jade:#5cc3a3; --jade-soft:#1b332b; --clay:#e3916a; --clay-soft:#36231b; --hatch:#3c4945;
+  --good:#7ccf8a; --bad:#f08a76; --slate:#a7b3c9; --slate-soft:#232a36; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.45}
+.wrap{max-width:1040px;margin:0 auto;padding-block:22px 36px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+h1{font-size:1.5rem;font-weight:700}
+h2{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;font-family:var(--f-body)}
+.sub{margin:2px 0 0;color:var(--muted);font-size:.85rem}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.zh{font-family:"Noto Sans TC",sans-serif;font-weight:500;color:var(--muted);font-size:.78em;margin-left:5px}
+section{display:flex;flex-direction:column;gap:10px}
+
+/* timeline */
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:20px;height:10px;border-radius:3px;vertical-align:middle;margin-right:6px}
+.tl-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.tl{min-width:640px;padding:14px 16px 10px;display:grid;grid-template-columns:120px 1fr;row-gap:8px;column-gap:12px}
+.lab{font-weight:600;font-size:.86rem;display:flex;align-items:center}
+.track{position:relative;height:34px;border-radius:6px;background:linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/calc(100%/10.5) 100%}
+.late{position:absolute;top:0;bottom:0;left:60.32%;right:0;background:repeating-linear-gradient(90deg,transparent 0 6px,color-mix(in srgb,var(--bad) 7%,transparent) 6px 12px);border-left:1px dashed var(--bad);border-radius:0 6px 6px 0}
+.slot{position:absolute;top:4px;bottom:4px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-mono);font-size:.7rem;font-weight:500;white-space:nowrap;overflow:hidden}
+.slot.r{background:var(--jade-soft);color:var(--jade);border:1px solid var(--jade)}
+.slot.i{background:var(--clay-soft);color:var(--clay);border:1px solid var(--clay)}
+.slot.off{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--hatch) 5px 7px);color:var(--muted);border:1px dashed var(--hatch)}
+.axis{position:relative;height:16px;font-family:var(--f-mono);font-size:.68rem;color:var(--muted)}
+.axis span{position:absolute;transform:translateX(-50%)}
+.axis span:first-child{transform:none}
+
+/* costs */
+.costs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.costs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cost{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:1px}
+.cost .nm{font-size:.82rem;font-weight:600}
+.cost b{font-family:var(--f-display);font-size:1.25rem;font-variant-numeric:tabular-nums}
+.cost span{font-size:.76rem;color:var(--muted)}
+.cost.i{border-top:3px solid var(--clay)}
+.cost.r{border-top:3px solid var(--jade)}
+.small{margin:0;font-size:.8rem;color:var(--muted)}
+.small b{color:var(--ink)}
+
+/* ranked picks */
+.cands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:860px){.cands{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.i{border-top:3px solid var(--clay)}
+.card.r{border-top:3px solid var(--jade)}
+.card.q{border-top:3px dashed var(--slate)}
+.rank{display:flex;align-items:center;gap:10px}
+.rank .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:.95rem}
+.card.i .n{background:var(--clay);color:var(--surface)}
+.card.r .n{background:var(--jade);color:var(--surface)}
+.card.q .n{background:var(--slate-soft);color:var(--slate)}
+.card h3{font-size:1.06rem}
+.meta{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.when{font-size:.8rem;font-weight:600;padding:3px 9px;border-radius:99px;align-self:flex-start}
+.card.i .when{background:var(--clay-soft);color:var(--clay)}
+.card.r .when{background:var(--jade-soft);color:var(--jade)}
+.card.q .when{background:var(--slate-soft);color:var(--slate)}
+.pc{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;font-size:.88rem}
+.pc li{position:relative;padding-left:18px}
+.pc li::before{position:absolute;left:0;top:0;font-weight:700;font-family:var(--f-mono)}
+.pc.pro li::before{content:"+";color:var(--good)}
+.pc.con li::before{content:"−";color:var(--bad)}
+.pc b{font-weight:600}
+.label{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.label.pro{color:var(--good)}
+.label.con{color:var(--bad)}
+.opt{border:1px solid var(--line);border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.opt-h{font-weight:600;font-size:.9rem}
+.lowk{font-family:var(--f-body);font-weight:400;font-size:.78rem;color:var(--muted);font-style:italic}
+.opt.nope{color:var(--muted)}
+.opt.nope s{text-decoration-color:var(--bad);text-decoration-thickness:2px}
+.fno{font-family:var(--f-display);font-weight:700;font-size:1.05rem;color:var(--bad);transform:rotate(-2deg);align-self:flex-start}
+.opt-h .mono{font-weight:500;color:var(--muted);font-size:.8rem;margin-left:4px}
+
+/* notes + elimination */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.panel ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.panel b{font-weight:600}
+.elim{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.elim li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 10px;border-radius:7px;background:var(--bg);font-size:.88rem}
+.elim .x{text-decoration:line-through;text-decoration-color:var(--bad);color:var(--muted)}
+.elim .why{font-size:.76rem;font-weight:600;color:var(--bad);white-space:nowrap}
+.elim li.left .why{color:var(--slate)}
+.elim li.left{border:1px dashed var(--slate)}
+</style>
+
+<div class="wrap">
+  <div>
+    <h1>MTC class options</h1>
+    <p class="sub">NTNU Mandarin Training Center, from Fall 2026 · every class is 15 hrs a week (meets HES) · 3-month terms · A$ at NT$22.60</p>
+  </div>
+
+  <section>
+    <h2>Rundown · when classes run</h2>
+    <div class="legend">
+      <span><i style="background:var(--clay-soft);border:1px solid var(--clay)"></i>Intensive (3 hrs a day)</span>
+      <span><i style="background:var(--jade-soft);border:1px solid var(--jade)"></i>Regular (2 hrs a day + 5 hrs/wk multi-task)</span>
+      <span><i style="background:repeating-linear-gradient(135deg,transparent 0 3px,var(--hatch) 3px 5px);border:1px dashed var(--hatch)"></i>Not open to new beginners</span>
+      <span><i style="background:repeating-linear-gradient(90deg,transparent 0 3px,color-mix(in srgb,var(--bad) 18%,transparent) 3px 6px);border-left:1px dashed var(--bad)"></i>Late zone</span>
+    </div>
+    <div class="tl-scroll">
+      <div class="tl">
+        <div class="lab">Intensive A<span class="zh">6–9</span></div>
+        <div class="track"><div class="late"></div>
+          <div class="slot i" style="left:22.22%;width:26.98%">10:20–13:10</div>
+          <div class="slot i" style="left:60.32%;width:26.98%">14:20–17:10</div>
+        </div>
+        <div class="lab">Regular A<span class="zh">6–10</span></div>
+        <div class="track"><div class="late"></div>
+          <div class="slot r" style="left:1.59%;width:17.46%">08:10–10:00</div>
+          <div class="slot off" style="left:22.22%;width:17.46%">10:20–12:10</div>
+          <div class="slot r" style="left:41.27%;width:17.46%">12:20–14:10</div>
+          <div class="slot r" style="left:60.32%;width:17.46%">14:20–16:10</div>
+        </div>
+        <div class="lab">Intensive B<span class="zh">13–18</span></div>
+        <div class="track"><div class="late"></div>
+          <div class="slot i" style="left:60.32%;width:26.98%">14:20–17:10</div>
+        </div>
+        <div class="lab">Regular B<span class="zh">13–18</span></div>
+        <div class="track"><div class="late"></div>
+          <div class="slot r" style="left:1.59%;width:17.46%">08:10–10:00</div>
+        </div>
+        <div></div>
+        <div class="axis">
+          <span style="left:0">8:00</span><span style="left:19.05%">10:00</span><span style="left:38.1%">12:00</span>
+          <span style="left:57.14%">14:00</span><span style="left:76.19%">16:00</span><span style="left:95.24%">18:00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Costs and class size</h2>
+    <div class="costs">
+      <div class="cost i"><span class="nm">Intensive A</span><b>A$603<span> /mo</span></b><span class="mono">NT$40,876 / term</span><span>6–9 students</span></div>
+      <div class="cost r"><span class="nm">Regular A</span><b>A$448<span> /mo</span></b><span class="mono">NT$30,376 / term</span><span>6–10 students</span></div>
+      <div class="cost i"><span class="nm">Intensive B</span><b>A$444<span> /mo</span></b><span class="mono">NT$30,076 / term</span><span>13–18 students</span></div>
+      <div class="cost r"><span class="nm">Regular B</span><b>A$399<span> /mo</span></b><span class="mono">NT$27,076 / term</span><span>13–18 students</span></div>
+    </div>
+    <p class="small">Doing Intensive A for the first term only costs about <b>A$465 extra</b> in total vs Regular A. Plus NT$2,500 (≈ A$111) one-off admin and registration fee. Fees include accident insurance.</p>
+  </section>
+
+  <section>
+    <h2>Ranking</h2>
+    <div class="cands">
+      <article class="card i">
+        <div class="rank"><span class="n">1</span><div><h3>Intensive A<span class="zh">密集班 A</span></h3><div class="meta">10:20–13:10 · 6–9 students · 15 lessons/term</div></div></div>
+        <span class="when">First term only, then Regular A</span>
+        <span class="label pro">Pros</span>
+        <ul class="pc pro">
+          <li>More talking early in a small class, so a much better chance of getting your tones corrected</li>
+          <li>Your class will be sharper. That matters at Level 1, which has a lot of people who aren't serious</li>
+          <li>Fastest: 15 lessons a term vs 10 everywhere else</li>
+          <li>All 15 hours in one block, done by 1:10pm</li>
+        </ul>
+        <span class="label con">Cons</span>
+        <ul class="pc con">
+          <li>One term costs about <b>A$465 more</b> than Regular A</li>
+          <li>Hardest pace, while also settling in</li>
+        </ul>
+      </article>
+
+      <article class="card r">
+        <div class="rank"><span class="n">2</span><div><h3>Regular A<span class="zh">普通班 A</span></h3><div class="meta">12:20–14:10 · 6–10 students · 10 lessons/term</div></div></div>
+        <span class="when">Backup, and the plan after term 1</span>
+        <span class="label pro">Pros</span>
+        <ul class="pc pro">
+          <li>Small class, lots of speaking time</li>
+          <li>Mid price</li>
+          <li>Sweet spot: not early, not late</li>
+          <li>Easier pace while settling in</li>
+        </ul>
+        <span class="label con">Cons</span>
+        <ul class="pc con">
+          <li>5 hrs a week of multi-task training on top, at times MTC sets</li>
+          <li>Slower: 10 lessons a term</li>
+        </ul>
+      </article>
+
+      <article class="card q">
+        <div class="rank"><span class="n">3</span><div><h3>Not sure yet <span class="lowk">(lowk doesn't matter, hopefully we get option 1 or 2)</span></h3><div class="meta">What's left after ruling out late slots</div></div></div>
+        <span class="when">Contenders, see the list at the bottom</span>
+        <div class="opt">
+          <div class="opt-h">Regular A<span class="mono">08:10–10:00</span></div>
+          <ul class="pc pro"><li>Small class, whole day free after 10</li></ul>
+          <ul class="pc con"><li>Early every day, plus the multi-task hours</li></ul>
+        </div>
+        <div class="opt">
+          <div class="opt-h">Regular B<span class="mono">08:10–10:00</span></div>
+          <ul class="pc pro"><li>Cheapest (A$399/mo), only allowed as a 3rd choice anyway</li></ul>
+          <ul class="pc con"><li>Big class, 7–8 lessons a term, may not run</li></ul>
+        </div>
+        <div class="opt nope">
+          <div class="opt-h"><s>"I'm flexible"</s></div>
+          <ul class="pc pro"><li><s>Easiest for MTC to place you</s></li></ul>
+          <ul class="pc con"><li><s>Could land you in a late slot</s></li></ul>
+          <div class="fno">fuck no</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>General notes</h2>
+    <ul>
+      <li><b>Late slots are bad.</b> Anything from 14:20 eats the afternoon, and it's the slot for bums who don't study.</li>
+      <li>You pick a class type each term, so you can switch from Intensive A to Regular A after term 1.</li>
+      <li>B classes only appear as a 3rd choice on the form. If they don't fill, you're moved to A and pay the difference.</li>
+      <li>HES docks a month if your term average drops below 80.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>How #3 was picked · by elimination</h2>
+    <ul class="elim">
+      <li><span class="x">Regular A 14:20–16:10</span><span class="why">Late</span></li>
+      <li><span class="x">Intensive A 14:20–17:10</span><span class="why">Late</span></li>
+      <li><span class="x">Intensive B 14:20–17:10</span><span class="why">Late + big class</span></li>
+      <li><span class="x">Regular A 10:20–12:10</span><span class="why">Closed to beginners</span></li>
+      <li><span class="x">"I'm flexible"</span><span class="why">Fuck no</span></li>
+      <li class="left"><span>Regular A 08:10 · Regular B 08:10</span><span class="why">What's left → #3</span></li>
+    </ul>
+  </section>
+</div>
+
+</body></html>
